@@ -36,4 +36,28 @@ app.get("/books", (req, res) => {
     res.status(200).json(books);
 });
 
+app.get("/books/:id", (req, res) => {
+    const bookId: number = Number(req.params.id);
+
+    if (!Number.isInteger(bookId) || bookId <= 0) {
+        res.status(400).json({
+            message: `${req.params.id} is not a valid ID.`
+        })
+        return;
+    }
+
+    const bookFound: Book | undefined = books.find(
+        (book) => book.id === bookId
+    );
+
+    if (!bookFound) {
+        res.status(404).json({
+            message: "Book not found."
+        });
+        return;
+    }
+
+    res.status(200).json(bookFound);
+});
+
 export default app;
